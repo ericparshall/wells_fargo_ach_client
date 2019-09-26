@@ -30,13 +30,13 @@ module WellsFargoAchClient
     end
 
     def get_access_token(validation_consumer_key, validation_consumer_secret)
-      url = URI("https://api-certification.wellsfargo.com/token?grant_type=client_credentials")
+      url = URI("https://api.wellsfargo.com/token?grant_type=client_credentials")
 
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
 
       request = Net::HTTP::Post.new(url)
-
+puts "Basic #{Base64.strict_encode64("#{validation_consumer_key}:#{validation_consumer_secret}")}"
       request['Authorization'] = "Basic #{Base64.strict_encode64("#{validation_consumer_key}:#{validation_consumer_secret}")}"
       request['Content-Type'] = 'application/x-www-form-urlencoded'
       request['Content-Length'] = 0
