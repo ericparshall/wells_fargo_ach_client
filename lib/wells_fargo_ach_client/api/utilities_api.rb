@@ -19,7 +19,7 @@ module WellsFargoAchClient
     def initialize(validation_consumer_key, validation_consumer_secret, cert_file, key_file, key_password, validation_environment = true)
       @api_client = ApiClient.new(Configuration.with_ssl_cert_auth(cert_file, key_file, key_password)) # We want to ensure configuration for this client doesn't alter the default
 
-      access_token = get_access_token(validation_consumer_key, validation_consumer_secret)
+      access_token = get_access_token(validation_consumer_key, validation_consumer_secret, validation_environment)
 
       @api_client.config.configure do |config|
         config.host = if validation_environment
