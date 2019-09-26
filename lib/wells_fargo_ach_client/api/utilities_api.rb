@@ -22,7 +22,7 @@ module WellsFargoAchClient
       access_token = get_access_token(validation_consumer_key, validation_consumer_secret)
 
       @api_client.config.configure do |config|
-        config.host = "api-certification.wellsfargo.com"
+        config.host = "api.wellsfargo.com"
         config.base_path = "/utilities/v1"
         config.debugging = true
         config.api_key['Authorization'] = access_token
