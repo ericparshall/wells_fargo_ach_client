@@ -16,21 +16,30 @@ module WellsFargoAchClient
   class UtilitiesApi
     attr_accessor :api_client
 
-    def initialize(validation_consumer_key, validation_consumer_secret, cert_file, key_file, key_password)
+    def initialize(validation_consumer_key, validation_consumer_secret, cert_file, key_file, key_password, validation_environment = true)
       @api_client = ApiClient.new(Configuration.with_ssl_cert_auth(cert_file, key_file, key_password)) # We want to ensure configuration for this client doesn't alter the default
 
       access_token = get_access_token(validation_consumer_key, validation_consumer_secret)
 
       @api_client.config.configure do |config|
-        config.host = "api.wellsfargo.com"
+        config.host = if validation_environment
+          "api-certification.wellsfargo.com"
+        else
+          "api.wellsfargo.com"
+        end
         config.base_path = "/utilities/v1"
         config.debugging = true
         config.api_key['Authorization'] = access_token
       end
     end
 
-    def get_access_token(validation_consumer_key, validation_consumer_secret)
-      url = URI("https://api.wellsfargo.com/token?grant_type=client_credentials")
+    def get_access_token(validation_consumer_key, validation_consumer_secret, validation_environment = true)
+      host = if validation_environment
+        "api-certification.wellsfargo.com"
+      else
+        "api.wellsfargo.com"
+      end
+      url = URI("https://#{host}/token?grant_type=client_credentials")
 
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
